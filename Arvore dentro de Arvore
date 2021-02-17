@@ -1,0 +1,552 @@
+//OBS: FALTA MAIOR E MENOR CIDADE VACINADA
+#include<stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+typedef struct {
+     long cep;
+     int qdeVacinadas;
+}CLIENTE ;
+typedef struct No {
+     CLIENTE info;
+     struct No *prox;
+     struct No *ant;
+     struct No2 *abaixo;
+}ARVORE;
+
+ARVORE *Criar(){
+     return NULL;
+}
+typedef struct{
+     int cepPessoa;
+     long cpf[12];
+     char nomePessoa[30];
+     int vacinou;
+     
+}CLIENTE2;
+
+typedef struct No2{
+     CLIENTE2 info2;
+     struct No2 *proximo;
+     struct No2 *anterior;
+}ARVORE2;
+
+ARVORE2 *CriarProd(ARVORE **arv){
+     return NULL;
+}
+
+void Inserir(ARVORE **arv, CLIENTE cl){
+     ARVORE *novo = (ARVORE*) malloc(sizeof(ARVORE));
+     novo->info = cl;
+     novo->prox = NULL;
+     novo->ant = NULL;
+     novo->abaixo = NULL;
+     novo->info.qdeVacinadas = 0;
+     ARVORE *aux = *arv;
+     ARVORE *anterior = NULL;
+     
+     if(*arv == NULL)
+     {
+          *arv = novo;
+          (*arv)->info.qdeVacinadas = 0;
+     }
+     else{
+
+          while(aux != NULL)
+          {
+               anterior = aux;
+
+               if(cl.cep > aux->info.cep)
+               {
+                    aux = aux->prox;
+               }
+               else
+               {
+                    aux = aux->ant;
+               }
+
+          }
+
+          if(cl.cep < anterior->info.cep)
+          {
+               anterior->ant = novo;
+          }
+
+          if( cl.cep > anterior->info.cep)
+          {
+               anterior->prox = novo;
+          }
+          if(cl.cep == anterior->info.cep)
+          {
+               printf("\nJa existe CEP\n");
+          }
+
+     }
+
+
+}
+
+
+void InserirProduto(ARVORE2 **arv2, CLIENTE2  cl2, ARVORE **arv){
+     ARVORE2 *novo2=(ARVORE2*)malloc(sizeof(ARVORE2));
+     novo2->info2 = cl2;
+     novo2->proximo = NULL;
+     novo2->anterior = NULL;
+     
+        ARVORE *aux = *arv;
+        ARVORE *anterior = NULL;
+        while((cl2.cepPessoa != aux->info.cep) && (aux != NULL))
+        {
+            anterior = aux;
+            if(cl2.cepPessoa < aux->info.cep)
+            {
+                aux = aux->ant;
+            }
+            else{
+                aux = aux->prox;
+            }
+        }
+          if(aux != NULL)
+          {
+              
+              if(aux->abaixo == NULL)
+             {
+                  if(cl2.cepPessoa == aux->info.cep)
+                  {
+                         aux->abaixo = novo2;
+                         printf("\n%s ", novo2->info2.nomePessoa);
+                         if(cl2.vacinou == 1)
+                        {
+                             aux->info.qdeVacinadas = aux->info.qdeVacinadas+1;
+                        }
+                       
+                         
+                  }
+                  else
+                    return NULL;
+               
+             }
+             else{
+                    if(cl2.cepPessoa == aux->info.cep)
+                    {
+                        if(cl2.vacinou == 1)
+                       {
+                              aux->info.qdeVacinadas = aux->info.qdeVacinadas+1;
+                        }
+                         ARVORE2 *aux2 = aux->abaixo;
+                         ARVORE2 *anterior2 = NULL;
+                         printf("\n01");
+                         while(aux2 != NULL)
+                         {
+                              printf("\n02");
+                              anterior2 = aux2;
+                              if(cl2.cpf < aux2->info2.cpf)
+                              {
+                                   aux2 = aux2->anterior;
+                              }
+                              else{
+                                   aux2 = aux2->proximo;
+                              }
+                              
+                         }
+                         if(cl2.cpf < anterior2->info2.cpf) 
+                         {
+                              printf("\n03");
+                              anterior2->anterior = novo2;
+                              printf("\nANTERIOR ANTERIOR %s", anterior2->info2.nomePessoa);
+                             
+                         }
+                         else{
+                                   printf("\n04");
+                              anterior2->proximo = novo2;
+                              
+                         }
+                  
+                    }
+                    else{
+                         return NULL;
+                    }
+             }
+          }
+          else 
+               return NULL;
+       
+}
+
+
+ void Imp(ARVORE2 **arv2){
+      if(*arv2 != NULL){
+
+          Imp(&((*arv2)->anterior));
+
+          printf("\nNome Pessoa: %s",(*arv2)->info2.nomePessoa);
+          printf("\nCPF: ");
+          for(int i = 1; i<=11;i++)
+          {
+               printf("%d", (*arv2)->info2.cpf[i]);
+          }
+           printf("\nVacinou?: ") ;
+           if( (*arv2)->info2.vacinou == 1)
+           {
+               printf("...Sim\n");
+           }
+           else{
+                printf("...Nao\n");
+           }
+          Imp(&((*arv2)->proximo));
+      }
+}
+
+void Imprime(ARVORE **arv){
+    if(*arv != NULL)
+    {
+          Imprime(&((*arv)->ant));
+          
+          printf("\nCep: %d", (*arv)->info.cep);
+          printf("\nQde Vacinadas: %d\n", (*arv)->info.qdeVacinadas);
+          
+          ARVORE2 **arv2 = &((*arv)->abaixo);
+          if( *arv2 != NULL)
+          {
+               Imp(arv2);
+             
+          }
+          Imprime(&((*arv)->prox));
+    }
+  
+}
+void ListarCep(ARVORE **arv){
+     if(*arv != NULL)
+     {
+          ListarCep(&((*arv)->ant));
+          printf("\nCep: %d", (*arv)->info.cep);
+          printf("  Qde Vacinadas: %d\n", (*arv)->info.qdeVacinadas);
+          ListarCep(&((*arv)->prox));
+     }
+}
+//FUNCIONANDO
+void EncontraCpf(ARVORE2 **arv2,int cpf[]){
+     if(*arv2 != NULL)
+     {
+          bool verdade = false;
+          EncontraCpf(&((*arv2)->anterior), cpf);
+          if(cpf[1] == (*arv2)->info2.cpf[1])
+          {
+              if(cpf[2] == (*arv2)->info2.cpf[2])
+               {
+                   if(cpf[3] == (*arv2)->info2.cpf[3])
+                    {
+                        if(cpf[4] == (*arv2)->info2.cpf[4])
+                         {
+                             if(cpf[5] == (*arv2)->info2.cpf[5])
+                              {
+                                  if(cpf[6] == (*arv2)->info2.cpf[6])
+                                   {
+                                       if(cpf[7] == (*arv2)->info2.cpf[7])
+                                        {
+                                            if(cpf[8] == (*arv2)->info2.cpf[8])
+                                             {
+                                                 if(cpf[9] == (*arv2)->info2.cpf[9])
+                                                  {
+                                                      if(cpf[10] == (*arv2)->info2.cpf[10])
+                                                       {
+                                                          verdade = true;
+                                                       }
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+          }
+              
+         
+           if(verdade)
+          {
+               printf("\nCpf  Localizado: ");
+               for(int i = 1; i<=11; i++ )
+               {
+                    printf("%d",(*arv2)->info2.cpf[i]);
+               }
+               printf("\nNome: %s",(*arv2)->info2.nomePessoa);
+               printf("\nVacinou?: ");
+               
+               if( (*arv2)->info2.vacinou == 1)
+               {
+                    printf("...Sim");
+               }
+               else{
+                    printf("...Nao");
+               }
+               printf("\nCEP da residencia: %d\n\n",(*arv2)->info2.cepPessoa);
+          }
+         
+          EncontraCpf(&((*arv2)->proximo), cpf);
+     }
+}
+
+void BuscarCpf( ARVORE **arv, int cpf[]){
+     if(*arv != NULL)
+     {
+          
+          BuscarCpf(&((*arv)->ant), cpf);
+          ARVORE2 **arv2 = &((*arv)->abaixo);
+          EncontraCpf(arv2, cpf);
+          
+         BuscarCpf(&((*arv)->prox),cpf ) ;
+     }
+}
+
+int VerificadorCpf( int cpf[]){
+
+           printf("\n10  %d", cpf[10] );
+           printf("\n11  %d", cpf[11] );
+         int x = cpf[10];   
+        int y = cpf[11];
+        int soma = 0 ;
+        int i;
+        int  peso = 10 ;
+        for (i=1; i<= 9; i++)
+        {
+             soma = soma+ (cpf[i] * peso);
+             peso--;
+        }
+        
+        int resto = soma%11;
+       resto = 11-resto;
+        printf("\nSoma %d", soma);
+        printf("\nResto1 =  %d",resto);
+        if(resto > 10)
+        {
+             resto = 0;
+        }
+        if(resto == x)
+        {
+             soma = 0;
+             peso = 11;
+             for(i=1; i<=10;i++)
+             {
+                    soma=soma+ cpf[i]*peso;
+                    peso--;
+             }
+               int resto =soma%11;
+                  resto = 11-resto;
+               printf("\nResto2  %d", resto);
+             if(resto == y)
+               {
+                    printf("\nValido");
+                  return  1;
+               }
+               else{
+                     printf("\nInValido");
+                    return -1;
+               }
+                    
+          }
+          else{
+               return -1;
+          }
+}
+
+
+int Vacina(ARVORE2 **arv2, int vc, int cpf[]){
+     if(*arv2 != NULL)
+     {
+          bool verdade = false;
+          Vacina(&((*arv2)->anterior), vc,  cpf);
+          if(cpf[1] == (*arv2)->info2.cpf[1])
+          {
+              if(cpf[2] == (*arv2)->info2.cpf[2])
+               {
+                   if(cpf[3] == (*arv2)->info2.cpf[3])
+                    {
+                        if(cpf[4] == (*arv2)->info2.cpf[4])
+                         {
+                             if(cpf[5] == (*arv2)->info2.cpf[5])
+                              {
+                                  if(cpf[6] == (*arv2)->info2.cpf[6])
+                                   {
+                                       if(cpf[7] == (*arv2)->info2.cpf[7])
+                                        {
+                                            if(cpf[8] == (*arv2)->info2.cpf[8])
+                                             {
+                                                 if(cpf[9] == (*arv2)->info2.cpf[9])
+                                                  {
+                                                      if(cpf[10] == (*arv2)->info2.cpf[10])
+                                                       {
+                                                          verdade = true;
+                                                       }
+                                                  }
+                                             }
+                                        }
+                                   }
+                              }
+                         }
+                    }
+               }
+          }
+          if(verdade)
+          {
+               printf("\nCpf  Localizado: ");
+               for(int i = 1; i<=11; i++ )
+               {
+                    printf("%d",(*arv2)->info2.cpf[i]);
+               }
+               printf("\nNome: %s",(*arv2)->info2.nomePessoa);
+               printf("\nCEP da residencia: %d\n\n",(*arv2)->info2.cepPessoa);
+               printf("\nVacinou?: ");
+               
+               if( vc == 1)
+               {
+                    (*arv2)->info2.vacinou = 1;
+                    ARVORE **arv;
+                    (*arv)->info.qdeVacinadas = (*arv)->info.qdeVacinadas +1;
+                    return 1;
+               }
+              else
+                    return -1;
+               
+          }
+         
+          
+          Vacina(&((*arv2)->proximo), vc, cpf);
+     }
+}
+void VacinarPessoa(ARVORE **arv, int vc, int cpf[]){
+     if (*arv != NULL)
+     {
+          VacinarPessoa(&((*arv)->ant),vc,  cpf);
+         
+          ARVORE2 **arv2 =  &((*arv)->abaixo);
+          
+          int recebe = Vacina(arv2, vc, cpf);
+          if(recebe == 1)
+          {
+               (*arv)->info.qdeVacinadas =  (*arv)->info.qdeVacinadas +1; 
+          }
+          VacinarPessoa(&((*arv)->prox),vc, cpf);
+          
+          
+     }
+
+}
+int main()
+{
+     ARVORE *arv;
+     CLIENTE cl;
+     arv = Criar();
+     CLIENTE2 cl2;
+     ARVORE2 *arv2;
+     
+     arv2 = CriarProd(&arv);
+
+     int valido;
+     int op = 1;
+     int cpf[12];
+     char cpfC[12];
+     int vc;
+     
+do{
+          printf("\n1 - Criar Arvore");
+          printf ("\n2 - CADASTRAR CEP");
+          printf("\n4 - CADASTRAR PESSOA");
+          printf ("\n5 - LISTAR CEP'S CADASTRADOS");
+          printf("\n6 - LISTAR PESSOAS CADASTRADAS");
+          printf("\n7 - BUSCAR CPF DE PESSOA CADASTRADA");
+          printf("\n8 - VACINAR PESSOA POR CPF");
+          printf("\nOperacao: ");
+          scanf("%d",&op);
+          switch(op)
+          {
+               case 1:
+                    Criar();
+                    CriarProd(&arv);
+                    break;
+               case 2:
+                    printf("\nCEP: ");
+                    scanf("%d",&cl.cep);
+                    Inserir(&arv, cl);
+                    break;
+               
+               case 4:
+                    printf("\nNome Pessoa: ");
+                    scanf("%s", cl2.nomePessoa);
+                    printf("\nNumero CEP: ");
+                    scanf("%d", &cl2.cepPessoa);
+                    printf("\nNumero Cpf : ");
+              
+                 for(int i = 1; i<=11 ;i++)
+                   {
+                        scanf("%d", &cl2.cpf[i]);
+                        cpf[i] = cl2.cpf[i];
+                   }
+                  
+                   valido = VerificadorCpf(cpf);
+                   
+                    if(valido >= 0){
+                        printf("\nVacinou? ");
+                        printf("\n[ 1 ] sim ");
+                        printf("\n[ 0 ] nao");
+                        scanf("%d",& cl2.vacinou);
+                         InserirProduto(&arv2, cl2, &arv);
+                         break;
+                    }
+                    else{
+                         printf("\nCpf Invalido!");
+                          break;
+                    } 
+               case 5:
+                    ListarCep(&arv);
+                    break;
+               case 6:
+                    Imprime(&arv);
+                    break;
+               
+               case 7:
+                    printf("\ninforme o CPF para busca: ");
+                    for(int i = 1; i<=11 ;i++)
+                   {
+                        scanf("%d", &cpf[i]);
+                   }
+                   
+                    BuscarCpf( &arv, cpf);//FUNCIONA
+                    break;
+               case 8:
+                    printf("\nInforme o CPF:  ");
+                     for(int i = 1; i<=11 ;i++)
+                   {
+                        scanf("%d", &cpf[i]);
+                   }
+                  printf("\nDeseja Vacinar? ");
+                  printf("\n[ 1 ] sim ");
+                  printf("\n[ 0 ] nao ");
+                  scanf("%d",&vc);
+                  VacinarPessoa(&arv, vc, cpf);
+                  break;
+             
+                    
+          }
+
+     }while(op!=0);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
